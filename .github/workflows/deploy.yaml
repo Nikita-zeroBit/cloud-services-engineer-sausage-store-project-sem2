@@ -110,7 +110,3 @@ jobs:
             export VERSION=`helm show chart chartmuseum/sausage-store | yq '.version'`
             helm upgrade --install sausage-store chartmuseum/sausage-store --version $VERSION --kubeconfig ./kubeconf  --set global.vault.name=vault --set global.vault.host=$VAULT_HOST --set global.vault.vaultToken=$VAULT_TOKEN --namespace '${{ secrets.NAMESPACE }}' --set backend_report.image_tag=${{ github.sha }} --set backend.image_tag=${{ github.sha }} --set frontend.image_tag=${{ github.sha }}
             rm -rf kubeconf
-        
-        - name: Verify deployment status
-          run: |
-            kubectl -n "${{ env.NAMESPACE }}" get pods,svc,ingress
