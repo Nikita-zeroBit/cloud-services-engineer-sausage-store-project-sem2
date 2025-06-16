@@ -36,7 +36,7 @@ spec:
                 memory: "500Mi"
         volumeMounts:
             - name: postgresql-data
-            mountPath: /var/lib/postgresql/data
+                mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:
   - metadata:
       name: postgresql-data
@@ -55,8 +55,8 @@ metadata:
     app: postgresql
 spec:
   ports:
-  - port: {{ .Values.postgresql.containerPort }}
-    targetPort: {{ .Values.postgresql.containerPort }}
+    - port: {{ .Values.postgresql.containerPort }}
+        targetPort: {{ .Values.postgresql.containerPort }}
   selector:
     app: postgresql
   clusterIP: None
