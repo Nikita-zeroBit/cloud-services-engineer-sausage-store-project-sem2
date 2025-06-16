@@ -13,12 +13,12 @@ frontend:
   service:
     port: 80
   ingress:
-    host: YOUR_STUDENT_HOSTNAME.students-projects.ru # Корректный домен будет указан в задании
+    host: nbaranovskii-front.students-projects.ru # Корректный домен будет указан в задании
     path: /
     pathType: Prefix
     secretName: 2sem-students-projects-wildcard-secret
   containerPort: 80
-  image: YOUR_DOCKERHUB/sausage-frontend:latest
+  image: nikitazerobit/sausage-frontend:latest
   resources:
     requests:
       memory: "128Mi"
@@ -48,7 +48,7 @@ backend:
     rollingUpdate:
       maxUnavailable: 1
       maxSurge: 2
-  image: YOUR_DOCKERHUB/sausage-backend:latest
+  image: amazoncorretto:17-alpine
   resources:
     requests:
       memory: "256Mi"
@@ -61,23 +61,23 @@ backend:
     httpGet:
         path: /actuator/health
         port: 8080
-      initialDelaySeconds: 30
-      periodSeconds: 15
-      timeoutSeconds: 5
-      failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
   vpa:
     updatePolicy:
         updateMode: "Off"
-      resourcePolicy:
-        containerPolicies:
-          - containerName: backend
-            minAllowed:
-              cpu: 100m
-              memory: 180Mi
-            maxAllowed:
-              cpu: 1
-              memory: 512Mi
-            controlledResources: ["cpu", "memory"]
+    resourcePolicy:
+      containerPolicies:
+        - containerName: backend
+          minAllowed:
+            cpu: 100m
+            memory: 180Mi
+          maxAllowed:
+            cpu: 1
+            memory: 512Mi
+          controlledResources: ["cpu", "memory"]
 
 backend-report:
   replicas: 1
