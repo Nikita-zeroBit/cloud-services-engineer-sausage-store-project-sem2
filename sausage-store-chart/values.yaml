@@ -118,6 +118,9 @@ infra:
       POSTGRES_USER: store
       POSTGRES_PASSWORD: storepassword
 
+  mongodbInit:
+    image: mongo:8.0.9
+
   mongodb:
     image: mongo:8.0.9
     enabled: true

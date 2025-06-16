@@ -39,4 +39,9 @@ spec:
                   name: mongodb-secret
                   key: MONGO_INITDB_ROOT_PASSWORD
           resources:
-{{ toYaml .Values.mongodb.resources | indent 12 }}
+            requests:
+                cpu: 50m
+                memory: 64Mi
+            limits:
+                cpu: 50m
+                memory: 128Mi
