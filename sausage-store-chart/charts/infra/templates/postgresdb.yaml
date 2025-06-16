@@ -1,3 +1,4 @@
+{{- if .Values.postgresql.enabled }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -72,3 +73,4 @@ metadata:
 type: Opaque
 stringData:
   POSTGRES_PASSWORD: "{{ .Values.postgresql.env.POSTGRES_PASSWORD }}"
+{{- end }}
