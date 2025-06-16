@@ -38,14 +38,11 @@ spec:
         - containerPort: {{ .Values.mongodb.containerPort }}
         resources: 
           requests:
-                memory: "128Mi"
-                cpu: "50m"
-              limits:
-                cpu: "500m"
-                memory: "256Mi"
-            volumeMounts:
-              - name: mongodb-data
-                mountPath: /data/db
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
         volumeMounts:
         - name: mongodb-data
           mountPath: /data/db
