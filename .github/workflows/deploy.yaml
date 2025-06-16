@@ -73,7 +73,9 @@ jobs:
         - name: Check out the repo
           uses: actions/checkout@v3
         - name: Install Helm
-          uses: azure/setup-helm@v4.3.0
+          uses: azure/setup-helm@v1
+          with:
+            version: v3.4.0
         - name: Add repo
           run: |
             helm plugin install https://github.com/chartmuseum/helm-push
@@ -97,7 +99,9 @@ jobs:
 
       steps:
         - name: Install Helm
-          uses: azure/setup-helm@v4.3.0
+          uses: azure/setup-helm@v1
+          with:
+            version: v3.4.0
         
         - name: Add helm repo
           run: |
