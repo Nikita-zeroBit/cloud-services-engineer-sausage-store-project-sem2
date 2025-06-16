@@ -26,11 +26,17 @@ spec:
           - secretRef:
               name: postgresql-secret
         ports:
-        - containerPort: {{ .Values.postgresql.containerPort }}
-        resources: {{ toYaml .Values.postgresql.resources | indent 10 }}
+          - containerPort: {{ .Values.postgresql.containerPort }}
+        resources:
+            requests:
+                memory: "128Mi"
+                cpu: "50m"
+            limits:
+                cpu: "500m"
+                memory: "500Mi"
         volumeMounts:
-        - name: postgresql-data
-          mountPath: /var/lib/postgresql/data
+            - name: postgresql-data
+            mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:
   - metadata:
       name: postgresql-data
