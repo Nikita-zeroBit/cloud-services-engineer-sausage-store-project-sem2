@@ -1,9 +1,9 @@
 global:
   imagePullPolicy: IfNotPresent
-  vault:
-    host: ip
-    name: vault
-    vaultToken: someToken
+  # vault:
+  #   host: ip
+  #   name: vault
+  #   vaultToken: someToken
 
 frontend:
   replicas: 1
