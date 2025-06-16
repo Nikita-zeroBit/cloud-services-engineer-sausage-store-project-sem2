@@ -140,13 +140,3 @@ infra:
       MONGO_INITDB_USERNAME: mongouser
       MONGO_INITDB_PASSWORD: mongospassword
     containerPort: 27017
-    resources:
-      requests:
-        memory: "128Mi"
-        cpu: "50m"
-      limits:
-        memory: "256Mi"
-        cpu: "300m"
-    persistence:
-      enabled: true
-      size: 1Gi
