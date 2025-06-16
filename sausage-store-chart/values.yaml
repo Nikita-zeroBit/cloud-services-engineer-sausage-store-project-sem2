@@ -1,9 +1,5 @@
 global:
   imagePullPolicy: IfNotPresent
-  vault:
-    enabled: false
-    host: vault.example.com
-    name: vault
 
 frontend:
   replicas: 1
@@ -13,10 +9,9 @@ frontend:
   service:
     port: 80
   ingress:
-    host: nbaranovskii-front.students-projects.ru # Корректный домен будет указан в задании
+    host: nbaranovskii.2sem.students-projects.ru # Корректный домен будет указан в задании
     path: /
     pathType: Prefix
-    secretName: 2sem-students-projects-wildcard-secret
   containerPort: 80
   image: nikitazerobit/sausage-frontend:latest
   resources:
@@ -48,7 +43,7 @@ backend:
     rollingUpdate:
       maxUnavailable: 1
       maxSurge: 2
-  image: amazoncorretto:17-alpine
+  image: nikitazerobit/sausage-backend:latest
   resources:
     requests:
       memory: "256Mi"
@@ -97,6 +92,12 @@ backend-report:
       memory: "256Mi"
       cpu: 300m
   containerPort: 8080
+  secret:
+    dbport: 27017
+    dbhost: mongodb
+    dbname: sausage-store
+    dbuser: mongouser
+    dbpassword: mongospassword
   hpa:
     minReplicas: 1
     maxReplicas: 5
@@ -104,13 +105,14 @@ backend-report:
 
 infra:
   postgresql:
+    enabled: true
     replicas: 1
     image: postgres:17.5
     containerPort: 5432
     env:
       POSTGRES_DB: sausage-store
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: store
+      POSTGRES_PASSWORD: storepassword
     resources:
       requests:
         memory: "256Mi"
@@ -118,9 +120,14 @@ infra:
       limits:
         memory: "512Mi"
         cpu: "500m"
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 2Gi
 
   mongodb:
     image: mongo:8.0.9
+    enabled: true
     replicas: 1
     env:
       MONGO_INITDB_DATABASE: sausage-store
@@ -136,3 +143,6 @@ infra:
       limits:
         memory: "256Mi"
         cpu: "300m"
+    persistence:
+      enabled: true
+      size: 1Gi
