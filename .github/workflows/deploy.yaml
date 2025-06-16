@@ -87,7 +87,10 @@ jobs:
             export NEW_VER=`echo "$CURRENT_VER" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g'`
             yq e -i '.version = env(NEW_VER)' sausage-store-chart/Chart.yaml
             cd sausage-store-chart
-            if [ "$CURRENT_VER" != "$NEW_VER" ]; then
+            EXISTS=$(curl -s -u "${{ secrets.NEXUS_HELM_REPO_USER }}:${{ secrets.NEXUS_HELM_REPO_PASSWORD }}" "${{ secrets.NEXUS_HELM_REPO }}/index.yaml" | \
+                     yq '.entries["'sausage-store'"][] | select(.version == "'"$NEW_VER"'") | .version' || true)
+            if [ "$EXISTS" != "$NEW_VER" ]; then
+              echo "✅ Chart $CHART_NAME version $NEW_VER not found. Pushing..."
               helm cm-push --version=$NEW_VER --context-path="/repository/nbaranovskii-sem2-helm" . chartmuseum
             else
               echo "❌ Chart $CHART_NAME version $NEW_VER already exists. Skipping push."
