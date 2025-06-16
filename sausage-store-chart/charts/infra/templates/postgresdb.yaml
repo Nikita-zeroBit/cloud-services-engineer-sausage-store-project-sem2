@@ -33,18 +33,18 @@ spec:
                 cpu: "50m"
             limits:
                 cpu: "500m"
-                memory: "500Mi"
+                memory: "512Mi"
         volumeMounts:
             - name: postgresql-data
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql
   volumeClaimTemplates:
-  - metadata:
-      name: postgresql-data
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
+    - metadata:
+        name: postgresql-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
 
 ---
 apiVersion: v1

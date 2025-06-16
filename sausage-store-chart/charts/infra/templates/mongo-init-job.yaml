@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongodb-init
+  annotations:
+    helm.sh/hook: "post-install"
+    helm.sh/hook-weight: "5"
+    helm.sh/hook-delete-policy: "before-hook-creation,hook-succeeded"
+spec:
+  template:
+    metadata:
+      name: mongodb-init
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: mongodb-init
+          image: {{ .Values.mongodbInit.image }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until mongosh --host mongodb --port 27017 -u root -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --eval "db.adminCommand('ping')"; do
+                sleep 1;
+              done
+
+              mongosh --host mongodb --port {{ .Values.mongodb.containerPort }} \
+                -u "{{ .Values.mongodb.env.MONGO_INITDB_ROOT_USERNAME }}" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin <<EOF
+              use {{ .Values.mongodb.env.MONGO_INITDB_DATABASE }};
+              db.createUser({
+                user: "{{ .Values.mongodb.env.MONGO_INITDB_USERNAME }}",
+                pwd: "{{ .Values.mongodb.env.MONGO_INITDB_PASSWORD }}",
+                roles: [{ role: "readWrite", db: "{{ .Values.mongodb.env.MONGO_INITDB_DATABASE }}" }]
+              });
+              EOF
+          env:
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_INITDB_ROOT_PASSWORD
+          resources:
+{{ toYaml .Values.mongodb.resources | indent 12 }}

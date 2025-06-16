@@ -117,17 +117,6 @@ infra:
       POSTGRES_DB: sausage-store
       POSTGRES_USER: store
       POSTGRES_PASSWORD: storepassword
-    resources:
-      requests:
-        memory: "256Mi"
-        cpu: "300m"
-      limits:
-        memory: "512Mi"
-        cpu: "500m"
-    persistence:
-      enabled: true
-      storageClass: ""
-      size: 2Gi
 
   mongodb:
     image: mongo:8.0.9
